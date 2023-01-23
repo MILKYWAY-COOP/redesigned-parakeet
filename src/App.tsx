@@ -1,7 +1,9 @@
+import { Grid } from 'components';
+
 function App() {
   return (
-    <div className="App">
-      <h1>This should Show</h1>
+    <div className='App'>
+      <Grid />
     </div>
   );
 }
