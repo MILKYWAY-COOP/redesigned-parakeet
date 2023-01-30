@@ -1,67 +1,27 @@
 import { useState } from 'react';
 
-import { IGetSolution, IGenerateSudoku } from 'types';
+import { IGetSolution } from 'types';
 
 export const GetSolution = (): IGetSolution => {
-  const [isSolving, setIsSolving] = useState(false);
+  const [grid, setGrid] = useState<number[][]>();
 
   function solveSudoku(board: number[][]): number[][] | undefined {
-    setIsSolving(true);
-    //Find an empty cell
-    let emptyCell = findEmptyCell(board);
-    if (!emptyCell) {
-      return board;
-    }
-    let [row, col] = emptyCell;
-    //Try filling the empty cell with a numbers 1-9
-    for (let num = 1; num <= 9; num++) {
-      //Check if the number is valid
-      if (isValid(board, row, col, num)) {
-        //If valid, fill the cell with the number
-        board[row][col] = num;
-        //Recursively call solveSudoku
-        if (solveSudoku(board)) {
-          return board;
-        }
-        //If the number is not valid, reset the cell to 0
-        board[row][col] = 0;
+    if (board) {
+      let emptyCell = findEmptyCell(board);
+      if (!emptyCell) {
+        return board;
       }
-    }
-    setIsSolving(false);
-  }
-
-  function checkValidity(board: number[][]): number[][] | undefined {
-    let newBoard = createEmptyBoard();
-    for (let row = 0; row < board.length; row++) {
-      for (let col = 0; col < board[row].length; col++) {
-        if (!isValid(board, row, col, board[row][col])) {
-          newBoard[row][col] = -1;
+      let [row, col] = emptyCell;
+      for (let num = 1; num <= 9; num++) {
+        if (isValid(board, row, col, num)) {
+          board[row][col] = num;
+          if (solveSudoku(board)) {
+            return board;
+          }
+          board[row][col] = 0;
         }
       }
     }
-    if (findEmptySpace(newBoard)) {
-      return newBoard;
-    }
-    return board;
-  }
-
-  function createEmptyBoard() {
-    let board = [];
-    for (let i = 0; i < 9; i++) {
-      board.push(new Array(9).fill(0));
-    }
-    return board;
-  }
-
-  function findEmptySpace(board: number[][]): boolean {
-    for (let row = 0; row < board.length; row++) {
-      for (let col = 0; col < board[row].length; col++) {
-        if (board[row][col] === 0) {
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   function findEmptyCell(board: number[][]): number[] | undefined {
@@ -105,7 +65,41 @@ export const GetSolution = (): IGetSolution => {
     return true;
   }
 
-  function generateSudoku(): IGenerateSudoku {
+  function checkValidity(board: number[][]): number[][] | undefined {
+    let newBoard = createEmptyBoard();
+    for (let row = 0; row < board.length; row++) {
+      for (let col = 0; col < board[row].length; col++) {
+        if (!isValid(board, row, col, board[row][col])) {
+          newBoard[row][col] = -1;
+        }
+      }
+    }
+    if (findEmptySpace(newBoard)) {
+      return newBoard;
+    }
+    return board;
+  }
+
+  function createEmptyBoard() {
+    let board = [];
+    for (let i = 0; i < 9; i++) {
+      board.push(new Array(9).fill(0));
+    }
+    return board;
+  }
+
+  function findEmptySpace(board: number[][]): boolean {
+    for (let row = 0; row < board.length; row++) {
+      for (let col = 0; col < board[row].length; col++) {
+        if (board[row][col] === 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function generateSudoku(): void {
     let sudoku: number[][] = Array.from({ length: 9 }, () => Array(9).fill(0));
     let numbers: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -131,10 +125,9 @@ export const GetSolution = (): IGetSolution => {
         emptyCells--;
       }
     }
-    return { sudoku };
+    setGrid(sudoku);
   }
 
-  //helper function to shuffle an array
   function shuffle(array: number[]): number[] {
     for (let i = array.length - 1; i > 0; i--) {
       let j = Math.floor(Math.random() * (i + 1));
@@ -147,7 +140,7 @@ export const GetSolution = (): IGetSolution => {
     solveSudoku,
     generateSudoku,
     checkValidity,
-    isSolving,
-    setIsSolving,
+    grid, 
+    setGrid
   };
 };
