@@ -1,0 +1,30 @@
+.main {
+  background-color: #898888;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid black;
+  overflow: hidden;
+
+  input {
+    width: inherit;
+    height: inherit;
+    background-color: #898888;
+    border: none;
+    text-align: center;
+    font-size: 20px;
+
+    &:hover {
+      background-color: inherit;
+      cursor: pointer;
+    }
+  }
+
+  .changeable {
+    background-color: #e6e6e6;
+
+    &:hover {
+      background-color: #cccccc;
+    }
+  }
+}
