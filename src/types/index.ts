@@ -12,8 +12,8 @@ export interface IGenerateSudoku {
 
 export interface IGetSolution {
   solveSudoku: solveSudoku;
-  generateSudoku: () => IGenerateSudoku;
+  generateSudoku: void;
   checkValidity: ICheckValidity;
-  isSolving: boolean;
-  setIsSolving: (isSolving: boolean) => void;
+  grid: number[][];
+  setGrid: React.Dispatch<React.SetStateAction<number[][]>>;
 }
