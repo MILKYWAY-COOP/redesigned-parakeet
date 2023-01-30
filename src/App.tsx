@@ -1,8 +1,10 @@
 import { Grid } from 'components';
 
+import './index.scss';
+
 function App() {
   return (
-    <div className='App'>
+    <div className='app'>
       <Grid />
     </div>
   );
