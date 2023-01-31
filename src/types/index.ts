@@ -1,6 +1,6 @@
-interface solveSudoku {
-  (board: number[][]): void;
-}
+// interface ISolveSudoku {
+//   result: number[][];
+// }
 
 interface ICheckValidity {
   (board: number[][]): number[][] | undefined;
@@ -11,9 +11,9 @@ export interface IGenerateSudoku {
 }
 
 export interface IGetSolution {
-  solveSudoku: solveSudoku;
-  generateSudoku: void;
+  solveSudoku: (grid: number[][]) => { board: number[][] } | undefined;
+  generateSudoku: () => IGenerateSudoku;
   checkValidity: ICheckValidity;
   grid: number[][];
-  setGrid: React.Dispatch<React.SetStateAction<number[][]>>;
+  setGrid: (grid: number[][]) => void;
 }
