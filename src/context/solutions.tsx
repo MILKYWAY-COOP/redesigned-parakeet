@@ -3,25 +3,35 @@ import { useState } from 'react';
 import { IGetSolution } from 'types';
 
 export const GetSolution = (): IGetSolution => {
-  const [grid, setGrid] = useState<number[][]>();
+  const [grid, setGrid] = useState<number[][]>(generateSudoku().sudoku);
 
-  function solveSudoku(board: number[][]): number[][] | undefined {
-    if (board) {
-      let emptyCell = findEmptyCell(board);
-      if (!emptyCell) {
-        return board;
-      }
-      let [row, col] = emptyCell;
-      for (let num = 1; num <= 9; num++) {
-        if (isValid(board, row, col, num)) {
-          board[row][col] = num;
-          if (solveSudoku(board)) {
-            return board;
-          }
-          board[row][col] = 0;
+  function solveSudoku(board: number[][]): { board: number[][] } | undefined {
+    //Find an empty cell
+    let emptyCell = findEmptyCell(board);
+    // if (!emptyCell) {
+    //   return board;
+    // }
+    if (emptyCell === undefined) {
+      return { board };
+    }
+    let [row, col] = emptyCell;
+    //Try filling the empty cell with a numbers 1-9
+    for (let num = 1; num <= 9; num++) {
+      //Check if the number is valid
+      if (isValid(board, row, col, num)) {
+        //If valid, fill the cell with the number
+        board[row][col] = num;
+        //Recursively call solveSudoku
+        if (solveSudoku(board)) {
+          return { board };
         }
+        //If the number is not valid, reset the cell to 0
+        board[row][col] = 0;
       }
     }
+    //If no number is valid, return false
+
+    return undefined;
   }
 
   function findEmptyCell(board: number[][]): number[] | undefined {
@@ -32,6 +42,7 @@ export const GetSolution = (): IGetSolution => {
         }
       }
     }
+    return undefined;
   }
 
   function isValid(
@@ -99,7 +110,7 @@ export const GetSolution = (): IGetSolution => {
     return false;
   }
 
-  function generateSudoku(): void {
+  function generateSudoku() {
     let sudoku: number[][] = Array.from({ length: 9 }, () => Array(9).fill(0));
     let numbers: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -125,7 +136,7 @@ export const GetSolution = (): IGetSolution => {
         emptyCells--;
       }
     }
-    setGrid(sudoku);
+    return { sudoku };
   }
 
   function shuffle(array: number[]): number[] {
@@ -140,7 +151,7 @@ export const GetSolution = (): IGetSolution => {
     solveSudoku,
     generateSudoku,
     checkValidity,
-    grid, 
+    grid,
     setGrid
   };
 };
