@@ -22,7 +22,6 @@ export default function Input(Props: IProps) {
     setValue(event.target.value);
   };
 
-  console.log(i)
   i.toString();
 
   return (
